@@ -217,6 +217,7 @@ interactively-ask-for-files-to-add:
 			git add $$root_files; \
 			read -p "Enter commit message for root: " root_msg; \
 			git commit -m "root: $$root_msg"; \
+			read -p "Do you want to push changes at main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepo; \
 			if [[ "$$isPushRequiredAtMainRepoForRootChanges" != "skip" && ! -z "$$isPushRequiredAtMainRepoForRootChanges" ]]; then \
 				echo -e "\nPushing to root repo at $$CURRENT_BRANCH branch..."; \
 				git push origin "$$CURRENT_BRANCH"; \
