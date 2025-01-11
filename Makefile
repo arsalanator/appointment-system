@@ -1,10 +1,77 @@
 # Variables
 FRONTEND_DIR := user-facing-frontend
 BACKEND_DIR := user-facing-backend
+USER_FACING_FRONTEND_DIR := user-facing-frontend/React-Typescipt
+USER_FACING_BACKEND_DIR := user-facing-backend/Express-Typescipt
+CACHE_DB_DIR := databases/cache-database/Redis-IOredis-Typescript
+CONTENT_DB_DIR := databases/content-database/Mongodb-Mongoose-Typescript
+TRANSACTION_DB_DIR := databases/transactions-database/Mysql-TypeORM-Typescript
 DOCKER_IMAGE := appointment-system
 DOCKER_REGISTRY := your-docker-registry # Replace with actual registry
 K8S_NAMESPACE := appointment-system
 ENV_FILE := .env
+
+run-lint-on-all:
+	@$(MAKE) run-lint DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-lint DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-lint DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-lint DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-lint DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-lint-fix-on-all:
+	@$(MAKE) run-lint-fix DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-lint-fix DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-lint-fix DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-lint-fix DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-lint-fix DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-prettier-format-on-all:
+	@$(MAKE) run-prettier-format DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-prettier-format DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-prettier-format DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-prettier-format DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-prettier-format DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-prettier-format-check-on-all:
+	@$(MAKE) run-prettier-format-check DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-prettier-format-check DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-prettier-format-check DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-prettier-format-check DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-prettier-format-check DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-lint-and-prettier-format-check-on-all:
+	@$(MAKE) run-lint-and-prettier-format-check DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-lint-and-prettier-format-check DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-lint-and-prettier-format-check DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-lint-and-prettier-format-check DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-lint-and-prettier-format-check DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-lint-fix-and-prettier-format-check-on-all:
+	@$(MAKE) run-lint-fix-and-prettier-format-check DIRECTORY=$(USER_FACING_FRONTEND_DIR)
+	@$(MAKE) run-lint-fix-and-prettier-format-check DIRECTORY=$(USER_FACING_BACKEND_DIR)
+	@$(MAKE) run-lint-fix-and-prettier-format-check DIRECTORY=$(CACHE_DB_DIR)
+	@$(MAKE) run-lint-fix-and-prettier-format-check DIRECTORY=$(CONTENT_DB_DIR)
+	@$(MAKE) run-lint-fix-and-prettier-format-check DIRECTORY=$(TRANSACTION_DB_DIR)
+
+run-lint:
+	cd $(DIRECTORY)
+	npm run lint
+run-lint-fix:
+	cd $(DIRECTORY)
+	npm run lint:fix
+run-prettier-format:
+	cd $(DIRECTORY)
+	npm run format
+run-prettier-format-check:
+	cd $(DIRECTORY)
+	npm run format:check
+run-lint-and-prettier-format-check:
+	cd $(DIRECTORY)
+	npm run check
+run-lint-fix-and-prettier-format-check:
+	cd $(DIRECTORY)
+	npm run fix
+
 
 # make BRANCH="set-branch-here" pull-from-all-subtrees
 pull-from-all-subtrees:
@@ -87,7 +154,7 @@ push-to-frontend-subtree:
 # generating a zip file of project
 generate-project-rar-file:
 	echo "Generating project .rar file"
-	rm -rf current_app_state.zip && zip -r current_app_state.zip . -x "user-facing-backend/Express-Typescipt/node_modules/*" "user-facing-frontend/React-Typescipt/node_modules/*"
+	rm -rf current_app_state.zip && zip -r current_app_state.zip . -x "user-facing-backend/Express-Typescipt/node_modules/*" "user-facing-frontend/React-Typescipt/node_modules/*" "databases/transactions-database/Mysql-TypeORM-Typescript/node_modules/*" "databases/content-database/Mongodb-Mongoose-Typescript/node_modules/*" "databases/cache-database/Redis-IOredis-Typescript/node_modules/*"
 
 # Frontend tasks
 install-frontend:
