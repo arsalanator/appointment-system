@@ -1,16 +1,3 @@
-dist/
-coverage/
-build/
-
-user-facing-backend/Express-Typescipt/boostrapping.sh
-user-facing-frontend/React-Typescipt/bootstrap-the-folder-structure.sh
-user-facing-frontend/React-Typescipt/manually-create-folders-and-root-files.sh
-
-
-.DS_Store
-current_app_state.zip
-package-lock.json
-
 # Logs
 logs
 *.log
