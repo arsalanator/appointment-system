@@ -16,13 +16,7 @@
     "build-storybook": "storybook build",
     "clean-build": "rm -rf ../../user-facing-backend/Express-Typescript/public/build && mkdir -p ../../user-facing-backend/Express-Typescript/public/build",
     "build": "npm run clean-build && react-scripts build && npm run copy-build",
-    "copy-build": "cp -r build/* ../../user-facing-backend/Express-Typescript/public/build",
-    "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "check": "npm run lint && npm run format:check",
-    "fix": "npm run lint:fix && npm run format"
+    "copy-build": "cp -r build/* ../../user-facing-backend/Express-Typescript/public/build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,16 +49,6 @@
     "eslint-plugin-storybook": "^0.11.2",
     "prop-types": "^15.8.1",
     "storybook": "^8.4.7",
-    "webpack": "^5.97.1",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "eslint": "^8.52.0",
-    "prettier": "^3.0.3",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jest": "^27.6.0",
-    "eslint-plugin-promise": "^6.1.1"
+    "webpack": "^5.97.1"
   }
 }
