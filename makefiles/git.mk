@@ -227,4 +227,6 @@ interactively-ask-for-files-to-add:
 				git push origin "$$CURRENT_BRANCH"; \
 			fi; \
 		fi; \
+	else \
+		echo "No changes in root directory at $$CURRENT_BRANCH branch"; \
 	fi'
