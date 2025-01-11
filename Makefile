@@ -28,19 +28,19 @@ CONTENT_DB_PREFIX := databases/content-database/Mongodb-Mongoose-Typescript
 TRANSACTIONS_DB_PREFIX := databases/transactions-database/Mysql-TypeORM-Typescript
 
 # Remote urls
-FRONTEND_REMOTE_URL := https://github.com/arsalanator/user-facing-frontend-for-appointment-system-with-React-Typescipt
-BACKEND_REMOTE_URL := https://github.com/arsalanator/user-facing-backend-for-appointment-system-with-Express-Typescipt
-CACHE_DB_REMOTE_URL := https://github.com/arsalanator/cache-database-for-appointment-system-with-Redis-IOredis-Typescript
-CONTENT_DB_REMOTE_URL := https://github.com/arsalanator/content-database-for-appointment-system-with-Mongodb-Mongoose-Typescript
-TRANSACTIONS_DB_REMOTE_URL := https://github.com/arsalanator/transactions-database-for-appointment-system-with-Mysql-TypeORM-Typescript
+FRONTEND_REMOTE_URL := "https://github.com/arsalanator/user-facing-frontend-for-appointment-system-with-React-Typescipt"
+BACKEND_REMOTE_URL := "https://github.com/arsalanator/user-facing-backend-for-appointment-system-with-Express-Typescipt"
+CACHE_DB_REMOTE_URL := "https://github.com/arsalanator/cache-database-for-appointment-system-with-Redis-IOredis-Typescript"
+CONTENT_DB_REMOTE_URL := "https://github.com/arsalanator/content-database-for-appointment-system-with-Mongodb-Mongoose-Typescript"
+TRANSACTIONS_DB_REMOTE_URL := "https://github.com/arsalanator/transactions-database-for-appointment-system-with-Mysql-TypeORM-Typescript"
 
 
 # Collection of all prefixes and their corresponding remotes
-SUBTREES := $(FRONTEND_PREFIX):$(FRONTEND_REMOTE_URL) \
-            $(BACKEND_PREFIX):$(BACKEND_REMOTE_URL) \
-            $(CACHE_DB_PREFIX):$(CACHE_DB_REMOTE_URL) \
-            $(CONTENT_DB_PREFIX):$(CONTENT_DB_REMOTE_URL) \
-            $(TRANSACTIONS_DB_PREFIX):$(TRANSACTIONS_DB_REMOTE_URL)
+SUBTREES := $(FRONTEND_PREFIX)_$(FRONTEND_REMOTE_URL) \
+            $(BACKEND_PREFIX)_$(BACKEND_REMOTE_URL) \
+            $(CACHE_DB_PREFIX)_$(CACHE_DB_REMOTE_URL) \
+            $(CONTENT_DB_PREFIX)_$(CONTENT_DB_REMOTE_URL) \
+            $(TRANSACTIONS_DB_PREFIX)_$(TRANSACTIONS_DB_REMOTE_URL)
 
 # Default branch names
 DEFAULT_BRANCH_FOR_PARENT := main

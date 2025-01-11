@@ -50,8 +50,8 @@ sync-parent:
 sync-subtrees:
 	@echo "Pulling from all subtree repositories..."
 	@for subtree in $(SUBTREES); do \
-		PREFIX=$$(echo $$subtree | cut -d: -f1); \
-		REMOTE_URL=$$(echo $$subtree | cut -d: -f2); \
+		PREFIX=$$(echo $$subtree | cut -d_ -f1); \
+		REMOTE_URL=$$(echo $$subtree | cut -d_ -f2); \
 		echo "Pulling from $$REMOTE_URL for $$PREFIX..."; \
 		git subtree pull --prefix=$$PREFIX $$REMOTE_URL $(DEFAULT_SUBTREE_BRANCH) --squash; \
 	done
@@ -211,7 +211,7 @@ interactively-ask-for-files-to-add:
 	done; \
 	\
 	echo -e "\nChecking root directory..."; \
-	SUBTREE_PATHS=$$(echo "$(SUBTREES)" | tr " " "\n" | cut -d: -f1 | paste -sd"|" -); \
+	SUBTREE_PATHS=$$(echo "$(SUBTREES)" | tr " " "\n" | cut -d_ -f1 | paste -sd"|" -); \
 	ROOT_CHANGES=$$(git status --porcelain | grep -vE "^..($$SUBTREE_PATHS)"); \
 	if [[ ! -z "$$ROOT_CHANGES" ]]; then \
 		echo "Changes found in root at $$CURRENT_BRANCH branch:"; \
