@@ -179,8 +179,8 @@ interactively-ask-for-files-to-add:
 	rm -f .staged_subtrees.tmp; \
 	\
 	for subtree in $(SUBTREES); do \
-		PREFIX=$${subtree%%:*}; \
-		REMOTE=$${subtree#*:}; \
+		PREFIX=$$(echo $$subtree | cut -d_ -f1); \
+		REMOTE=$$(echo $$subtree | cut -d_ -f2); \
 		echo -e "\nChecking $$PREFIX..."; \
 		\
 		CHANGES=$$(git status --porcelain "$$PREFIX"); \
