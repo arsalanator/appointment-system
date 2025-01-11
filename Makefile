@@ -81,6 +81,7 @@ pull-from-all-subtrees:
 	@$(MAKE) pull-from-content-database-subtree BRANCH=$(BRANCH)
 	@$(MAKE) pull-from-transaction-database-subtree BRANCH=$(BRANCH)
 
+<<<<<<< HEAD
 # make BRANCH="set-branch-here" pull-from-backend-subtree
 pull-from-backend-subtree:
 	git subtree pull --prefix=user-facing-backend/Express-Typescipt origin $(BRANCH) --squash
@@ -100,6 +101,11 @@ pull-from-content-database-subtree:
 # make BRANCH="set-branch-here" pull-from-transaction-database-subtree
 pull-from-transaction-database-subtree:
 	git subtree pull --prefix=databases/transactions-database/Mysql-TypeORM-Typescript origin $(BRANCH) --squash
+=======
+# Default branch names
+DEFAULT_BRANCH_FOR_PARENT := main
+DEFAULT_SUBTREE_BRANCH := main
+>>>>>>> 4b95e56 (Adjusted Makefile by making it modular)
 
 
 # make BRANCH="set-branch-here" push-to-all-subtrees 
