@@ -1,0 +1,43 @@
+---
+- name: Import MongoDB public key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-6.0.asc
+    state: present
+
+- name: Add MongoDB repository
+  apt_repository:
+    repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse
+    state: present
+    filename: mongodb-org-6.0
+
+- name: Install MongoDB
+  apt:
+    name: mongodb-org
+    state: present
+    update_cache: yes
+
+- name: Copy MongoDB configuration
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart mongodb
+
+- name: Copy MongoDB service file
+  template:
+    src: mongodb.service.j2
+    dest: /etc/systemd/system/mongodb.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: 
+    - reload systemd
+    - restart mongodb
+
+- name: Ensure MongoDB is started and enabled
+  systemd:
+    name: mongodb
+    state: started
+    enabled: yes

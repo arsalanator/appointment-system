@@ -171,7 +171,7 @@ push-to-frontend-subtree:
 interactively-ask-for-files-to-add:
 	@bash -c 'CURRENT_BRANCH=$$(git branch --show-current); \
 	echo "Current branch: $$CURRENT_BRANCH"; \
-	read -p "Do you want to proceed as this will push to '$$CURRENT_BRANCH' branch ? (y/n) " answer; \
+	read -p "Do you want to proceed as this will push to $$CURRENT_BRANCH branch ? (y/n) " answer; \
 	if [[ "$$answer" != "y" ]]; then \
 		echo "Aborting..."; \
 		exit 1; \
@@ -185,7 +185,7 @@ interactively-ask-for-files-to-add:
 		\
 		CHANGES=$$(git status --porcelain "$$PREFIX"); \
 		if [[ ! -z "$$CHANGES" ]]; then \
-			echo "Changes found in $$PREFIX at '$$CURRENT_BRANCH' branch:"; \
+			echo "Changes found in $$PREFIX at $$CURRENT_BRANCH branch:"; \
 			echo "$$CHANGES"; \
 			read -p "Enter space-separated file paths to stage (or skip): " files; \
 			if [[ "$$files" != "skip" && ! -z "$$files" ]]; then \
@@ -196,12 +196,12 @@ interactively-ask-for-files-to-add:
 				git commit -m "$$PREFIX: $$msg"; \
 				read -p "Do you want to push to main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepo; \
 				if [[ "$$isPushRequiredAtMainRepo" != "skip" && ! -z "$$isPushRequiredAtMainRepo" ]]; then \
-					echo -e "\nPushing this commit to root repo at '$$CURRENT_BRANCH' branch..."; \
+					echo -e "\nPushing this commit to root repo at $$CURRENT_BRANCH branch..."; \
 					git push origin "$$CURRENT_BRANCH"; \
 				fi; \
 				read -p "Do you want to push to $$PREFIX at $$CURRENT_BRANCH (or skip): " isPushRequiredAtCurrentSubtree; \
 				if [[ "$$isPushRequiredAtCurrentSubtree" != "skip" && ! -z "$$isPushRequiredAtCurrentSubtree" ]]; then \
-					echo "Pushing this commit to $$PREFIX at '$$CURRENT_BRANCH' branch to $$REMOTE..."; \
+					echo "Pushing this commit to $$PREFIX at $$CURRENT_BRANCH branch to $$REMOTE..."; \
 					git subtree push --prefix="$$PREFIX" "$$REMOTE" $$CURRENT_BRANCH; \
 				fi; \
 			fi; \

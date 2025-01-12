@@ -47,6 +47,12 @@ DEFAULT_BRANCH_FOR_PARENT := main
 DEFAULT_SUBTREE_BRANCH := main
 
 
+ANSIBLE_PATH := deployments/ansible
+INVENTORY := $(ANSIBLE_PATH)/inventory
+PLAYBOOK := $(ANSIBLE_PATH)/site.yml
+VERBOSE := -v
+ANSIBLE_TAGS := 
+
 
 # Export all variables to sub-makes
 export

@@ -1,0 +1,36 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  tags: ['common', 'init']
+
+- name: Install common packages
+  apt:
+    name:
+      - curl
+      - wget
+      - gnupg
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - build-essential
+      - nginx
+      - ufw
+    state: present
+  tags: ['common', 'packages']
+
+- name: Configure UFW
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - '22'    # SSH
+    - '80'    # HTTP
+    - '443'   # HTTPS
+  tags: ['common', 'security']
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+  tags: ['common', 'security']

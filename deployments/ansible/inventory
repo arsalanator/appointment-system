@@ -1,0 +1,10 @@
+[databases]
+localhost ansible_connection=local
+
+[deployment]
+your-deploy-server ansible_host=<deploy-server-ip>
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/your-key.pem
+ansible_python_interpreter=/usr/bin/python3
