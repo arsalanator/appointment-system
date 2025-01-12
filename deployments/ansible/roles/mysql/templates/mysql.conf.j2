@@ -1,0 +1,30 @@
+[mysqld]
+pid-file        = /var/run/mysqld/mysqld.pid
+socket          = /var/run/mysqld/mysqld.sock
+datadir         = /var/lib/mysql
+log-error       = /var/log/mysql/error.log
+
+# Connection Settings
+port            = {{ mysql_port | default(3306) }}
+bind-address    = {{ mysql_bind_address | default('127.0.0.1') }}
+
+# InnoDB Settings
+innodb_buffer_pool_size = {{ mysql_innodb_buffer_pool_size | default('256M') }}
+innodb_log_file_size = {{ mysql_innodb_log_file_size | default('64M') }}
+innodb_flush_log_at_trx_commit = {{ mysql_innodb_flush_log_at_trx_commit | default(1) }}
+
+# Connection Limits
+max_connections = {{ mysql_max_connections | default(151) }}
+max_allowed_packet = {{ mysql_max_allowed_packet | default('16M') }}
+
+# Cache Settings
+query_cache_size = {{ mysql_query_cache_size | default('0') }}
+table_open_cache = {{ mysql_table_open_cache | default(2000) }}
+
+[mysql]
+no-auto-rehash
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = {{ mysql_dump_max_allowed_packet | default('16M') }}

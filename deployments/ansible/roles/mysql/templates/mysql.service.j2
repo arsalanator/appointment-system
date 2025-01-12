@@ -1,0 +1,18 @@
+[Unit]
+Description=MySQL Database Service
+After=network.target
+Documentation=man:mysqld(8)
+
+[Service]
+Type=notify
+User=mysql
+Group=mysql
+ExecStart=/usr/sbin/mysqld --defaults-file=/etc/mysql/my.cnf
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=10000
+Restart=always
+RestartSec=3
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

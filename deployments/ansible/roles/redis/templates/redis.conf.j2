@@ -1,0 +1,31 @@
+# Network
+bind {{ redis_bind_address | default('127.0.0.1') }}
+port {{ redis_port | default(6379) }}
+protected-mode {{ redis_protected_mode | default('yes') }}
+
+# General
+daemonize no
+supervised systemd
+pidfile /var/run/redis/redis-server.pid
+loglevel {{ redis_loglevel | default('notice') }}
+logfile /var/log/redis/redis-server.log
+
+# Memory Management
+maxmemory {{ redis_maxmemory | default('256mb') }}
+maxmemory-policy {{ redis_maxmemory_policy | default('noeviction') }}
+
+# Persistence
+dir /var/lib/redis
+dbfilename dump.rdb
+save 900 1
+save 300 10
+save 60 10000
+
+# Security
+requirepass {{ redis_password | default('') }}
+
+# Performance Tuning
+tcp-keepalive {{ redis_tcp_keepalive | default(300) }}
+timeout {{ redis_timeout | default(0) }}
+tcp-backlog {{ redis_tcp_backlog | default(511) }}
+databases {{ redis_databases | default(16) }}

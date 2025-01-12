@@ -1,0 +1,8 @@
+---
+- name: Setup Database Services
+  hosts: databases
+  become: yes
+  roles:
+    - mongodb
+    - redis
+    - mysql
