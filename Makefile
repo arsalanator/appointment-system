@@ -54,6 +54,15 @@ VERBOSE := -v
 ANSIBLE_TAGS := 
 
 
+STAGING_PROJECT_ID := your-app-staging
+PROD_PROJECT_ID := your-app-prod
+FRONTEND_PATH := user-facing-frontend/React-Typescript
+BUILD_PATH := $(FRONTEND_PATH)/build
+DATABASE_RULES_PATH := deployments/firebase/database.rules.json
+FCM_SERVER_KEY_PATH := deployments/firebase/fcm-server-key.json
+
+
+
 # Export all variables to sub-makes
 export
 

@@ -25,7 +25,7 @@ list-ansible-commands:
 	@echo "  sudo make setup-deploy-docker - Setup only Docker on deployment server"
 
 # Default target
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := list-ansible-commands
 
 # Check if running with sudo
 check-sudo:

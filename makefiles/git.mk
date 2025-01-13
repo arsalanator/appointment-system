@@ -193,7 +193,7 @@ interactively-ask-for-files-to-add:
 				git add $$files; \
 				echo "$$PREFIX:$$REMOTE" >> .staged_subtrees.tmp; \
 				read -p "Enter commit message for $$PREFIX: " msg; \
-				git commit -m "$$PREFIX: $$msg"; \
+				git commit -m "$$msg"; \
 				read -p "Do you want to push to main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepo; \
 				if [[ "$$isPushRequiredAtMainRepo" != "skip" && ! -z "$$isPushRequiredAtMainRepo" ]]; then \
 					echo -e "\nPushing this commit to root repo at $$CURRENT_BRANCH branch..."; \
@@ -220,7 +220,7 @@ interactively-ask-for-files-to-add:
 		if [[ "$$root_files" != "skip" && ! -z "$$root_files" ]]; then \
 			git add $$root_files; \
 			read -p "Enter commit message for root: " root_msg; \
-			git commit -m "root: $$root_msg"; \
+			git commit -m "Root Project: $$root_msg"; \
 			read -p "Do you want to push changes at main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepoForRootChanges; \
 			if [[ "$$isPushRequiredAtMainRepoForRootChanges" != "skip" && ! -z "$$isPushRequiredAtMainRepoForRootChanges" ]]; then \
 				echo -e "\nPushing to root repo at $$CURRENT_BRANCH branch..."; \
