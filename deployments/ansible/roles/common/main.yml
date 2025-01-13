@@ -34,3 +34,32 @@
   ufw:
     state: enabled
   tags: ['common', 'security']
+
+- name: Deploy Node.js Application
+  hosts: app_servers
+  become: yes
+  vars_files:
+    - vars/main.yml
+  
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+  roles:
+    - nodejs
+    - pm2
+    - nginx
+    - app_deploy
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded

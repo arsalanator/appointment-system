@@ -1,0 +1,34 @@
+module.exports = {
+  apps: [{
+    // Shared variables usage
+    name: '{{ shared_vars.app_name }}',
+    script: '{{ shared_vars.app_root }}/dist/index.js',
+    
+    // PM2-specific configurations
+    instances: {{ pm2_config.instances }},
+    exec_mode: '{{ pm2_config.exec_mode }}',
+    max_memory_restart: '{{ pm2_config.max_memory_restart }}',
+    
+    env_production: {
+      NODE_ENV: '{{ shared_vars.node_env }}',
+      PORT: {{ shared_vars.app_port }}
+    },
+    
+    // Process management
+    max_restarts: {{ pm2_config.max_restarts }},
+    min_uptime: '{{ pm2_config.min_uptime }}',
+    restart_delay: {{ pm2_config.restart_delay }},
+    
+    // Logging
+    error_file: '{{ pm2_config.error_log }}',
+    out_file: '{{ pm2_config.out_log }}',
+    merge_logs: {{ pm2_config.merge_logs | lower }},
+    time: {{ pm2_config.time | lower }},
+    
+    // Advanced settings
+    kill_timeout: {{ pm2_config.kill_timeout }},
+    wait_ready: {{ pm2_config.wait_ready | lower }},
+    listen_timeout: {{ pm2_config.listen_timeout }},
+    node_args: '{{ pm2_config.node_args }}'
+  }]
+};

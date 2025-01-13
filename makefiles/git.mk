@@ -166,41 +166,71 @@ push-to-frontend-subtree:
 	echo "Pushing to Subtree user-facing-frontend/React-Typescipt at branch $(BRANCH)"
 	git subtree push --prefix=user-facing-frontend/React-Typescipt $(BRANCH)
 
-
-
 interactively-ask-for-files-to-add:
 	@bash -c 'CURRENT_BRANCH=$$(git branch --show-current); \
 	echo "Current branch: $$CURRENT_BRANCH"; \
+	echo -e "\n"; \
 	read -p "Do you want to proceed as this will push to $$CURRENT_BRANCH branch ? (y/n) " answer; \
 	if [[ "$$answer" != "y" ]]; then \
 		echo "Aborting..."; \
 		exit 1; \
 	fi; \
 	rm -f .staged_subtrees.tmp; \
-	\
 	for subtree in $(SUBTREES); do \
 		PREFIX=$$(echo $$subtree | cut -d_ -f1); \
 		REMOTE=$$(echo $$subtree | cut -d_ -f2); \
-		echo -e "\nChecking $$PREFIX..."; \
-		\
+		echo -e "\nFollowing is the work done in subtree: $$PREFIX"; \
 		CHANGES=$$(git status --porcelain "$$PREFIX"); \
 		if [[ ! -z "$$CHANGES" ]]; then \
 			echo "Changes found in $$PREFIX at $$CURRENT_BRANCH branch:"; \
 			echo "$$CHANGES"; \
+			echo -e "\n"; \
+			read -p "Do you want to see contents of changed files and untracked files in $$PREFIX at $$CURRENT_BRANCH branch ? (y/n) " isChangeInEachFileForSubtreeRequiredToShow; \
+			if [[ "$$isChangeInEachFileForSubtreeRequiredToShow" == "y" ]]; then \
+				echo -e "\nContents of changed tracked files:"; \
+				git diff --cached "$$PREFIX"; \
+				git diff "$$PREFIX"; \
+				echo -e "\nContents of untracked files:"; \
+				git ls-files --others --exclude-standard "$$PREFIX" | while read -r file; do \
+					if [[ -f "$$file" ]]; then \
+						echo -e "\nFile: $$file"; \
+						cat "$$file"; \
+					fi; \
+				done; \
+			fi; \
+			echo -e "\n"; \
+			read -p "Do you want to proceed with this subtree? (y/skip) " proceed; \
+			if [[ "$$proceed" == "skip" ]]; then \
+				continue; \
+			fi; \
+			echo "Changes found in $$PREFIX at $$CURRENT_BRANCH branch:"; \
+			echo "$$CHANGES"; \
+			echo -e "\n"; \
 			read -p "Enter space-separated file paths to stage (or skip): " files; \
 			if [[ "$$files" != "skip" && ! -z "$$files" ]]; then \
 				echo $$files; \
 				git add $$files; \
 				echo "$$PREFIX:$$REMOTE" >> .staged_subtrees.tmp; \
+				echo -e "\n"; \
 				read -p "Enter commit message for $$PREFIX: " msg; \
 				git commit -m "$$msg"; \
-				read -p "Do you want to push to main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepo; \
-				if [[ "$$isPushRequiredAtMainRepo" != "skip" && ! -z "$$isPushRequiredAtMainRepo" ]]; then \
+				echo -e "\n"; \
+				read -p "Do you want to see what will be pushed to root / parent at $$CURRENT_BRANCH branch ? (y/n) " isPushContentForSubtreeRequiredToShow; \
+				if [[ "$$isPushContentForSubtreeRequiredToShow" == "y" ]]; then \
+					echo -e "\nFiles to be pushed to main repo:"; \
+					git show --name-only HEAD; \
+				fi; \
+				echo -e "\n"; \
+				read -p "Do you want to push to main repo at $$CURRENT_BRANCH (y/skip): " isPushRequiredAtMainRepo; \
+				if [[ "$$isPushRequiredAtMainRepo" == "y" ]]; then \
 					echo -e "\nPushing this commit to root repo at $$CURRENT_BRANCH branch..."; \
 					git push origin "$$CURRENT_BRANCH"; \
 				fi; \
-				read -p "Do you want to push to $$PREFIX at $$CURRENT_BRANCH (or skip): " isPushRequiredAtCurrentSubtree; \
-				if [[ "$$isPushRequiredAtCurrentSubtree" != "skip" && ! -z "$$isPushRequiredAtCurrentSubtree" ]]; then \
+				echo -e "\nFiles to be pushed to subtree $$PREFIX:"; \
+				git show --name-only HEAD; \
+				echo -e "\n"; \
+				read -p "Do you want to push to $$PREFIX at $$CURRENT_BRANCH (y/skip): " isPushRequiredAtCurrentSubtree; \
+				if [[ "$$isPushRequiredAtCurrentSubtree" == "y" ]]; then \
 					echo "Pushing this commit to $$PREFIX at $$CURRENT_BRANCH branch to $$REMOTE..."; \
 					git subtree push --prefix="$$PREFIX" "$$REMOTE" $$CURRENT_BRANCH; \
 				fi; \
@@ -209,20 +239,46 @@ interactively-ask-for-files-to-add:
 			echo "No changes in $$PREFIX at $$CURRENT_BRANCH branch"; \
 		fi; \
 	done; \
-	\
 	echo -e "\nChecking root directory..."; \
 	SUBTREE_PATHS=$$(echo "$(SUBTREES)" | tr " " "\n" | cut -d_ -f1 | paste -sd"|" -); \
 	ROOT_CHANGES=$$(git status --porcelain | grep -vE "^..($$SUBTREE_PATHS)"); \
 	if [[ ! -z "$$ROOT_CHANGES" ]]; then \
 		echo "Changes found in root at $$CURRENT_BRANCH branch:"; \
 		echo "$$ROOT_CHANGES"; \
+		echo -e "\n"; \
+		read -p "Do you want to see contents of changed files and untracked files in root / parent at $$CURRENT_BRANCH branch ? (y/n) " isChangeInEachFileForRootRepoRequiredToShow; \
+		if [[ "$$isChangeInEachFileForRootRepoRequiredToShow" == "y" ]]; then \
+			echo -e "\nContents of changed tracked files in root:"; \
+			git diff --cached | grep -vE "^..($$SUBTREE_PATHS)"; \
+			git diff | grep -vE "^..($$SUBTREE_PATHS)"; \
+			echo -e "\nContents of untracked files in root:"; \
+			git ls-files --others --exclude-standard | grep -vE "^($$SUBTREE_PATHS)" | while read -r file; do \
+				if [[ -f "$$file" ]]; then \
+					echo -e "\nFile: $$file"; \
+					cat "$$file"; \
+				fi; \
+			done; \
+			echo -e "\n"; \
+			echo "Changes found in Root repo at $$CURRENT_BRANCH branch:"; \
+			echo "$$ROOT_CHANGES"; \
+			echo -e "\n"; \
+		fi; \
+		echo -e "\n"; \
 		read -p "Enter space-separated file paths to stage (or skip): " root_files; \
 		if [[ "$$root_files" != "skip" && ! -z "$$root_files" ]]; then \
 			git add $$root_files; \
+			echo -e "\n"; \
 			read -p "Enter commit message for root: " root_msg; \
 			git commit -m "Root Project: $$root_msg"; \
-			read -p "Do you want to push changes at main repo at $$CURRENT_BRANCH (or skip): " isPushRequiredAtMainRepoForRootChanges; \
-			if [[ "$$isPushRequiredAtMainRepoForRootChanges" != "skip" && ! -z "$$isPushRequiredAtMainRepoForRootChanges" ]]; then \
+			echo -e "\n"; \
+			read -p "Do you want to see what will be pushed to root / parent at $$CURRENT_BRANCH branch ? (y/n) " isPushContentForRootRepoRequiredToShow; \
+			if [[ "$$isPushContentForRootRepoRequiredToShow" == "y" ]]; then \
+				echo -e "\nFiles to be pushed to main repo:"; \
+				git show --name-only HEAD; \
+			fi; \
+			echo -e "\n"; \
+			read -p "Do you want to push changes at main repo at $$CURRENT_BRANCH (y/skip): " isPushRequiredAtMainRepoForRootChanges; \
+			if [[ "$$isPushRequiredAtMainRepoForRootChanges" == "y" ]]; then \
 				echo -e "\nPushing to root repo at $$CURRENT_BRANCH branch..."; \
 				git push origin "$$CURRENT_BRANCH"; \
 			fi; \

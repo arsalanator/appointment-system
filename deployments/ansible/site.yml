@@ -3,6 +3,20 @@
   hosts: databases
   become: yes
   roles:
-    - mongodb
-    - redis
-    - mysql
+    - { role: mongodb, tags: ['mongodb'] }
+    - { role: redis, tags: ['redis'] }
+    - { role: mysql, tags: ['mysql'] }
+
+- name: Setup Deployment Server
+  hosts: deployment
+  become: yes
+  roles:
+    - { role: common, tags: ['common'] }
+    - { role: docker, tags: ['docker'] }
+    - { role: node, tags: ['node'] }
+    - { role: git, tags: ['git'] }
+    - { role: python, tags: ['python'] }
+  vars:
+    git_config_items:
+      - { name: 'core.filemode', value: 'true' }
+      - { name: 'core.autocrlf', value: 'input' }
