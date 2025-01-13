@@ -160,11 +160,6 @@ deploy-fcm-prod: check-firebase
 	firebase use $(PROD_PROJECT_ID)
 	firebase deploy --only functions:messaging
 
-# Build frontend
-build-frontend:
-	@echo "Building frontend..."
-	cd $(FRONTEND_PATH) && npm run build
-
 # Deploy to staging (all services)
 firebase-deploy-staging: check-firebase build-frontend deploy-database-staging deploy-fcm-staging
 	@echo "Deploying all services to Firebase Staging..."
