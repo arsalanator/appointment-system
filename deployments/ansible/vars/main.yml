@@ -1,0 +1,8 @@
+---
+# Shared variables used across multiple roles
+shared_vars:
+  app_name: "my-node-app"                          # Used by PM2 and Nginx
+  app_root: "/var/www/{{ app_name }}"             # Used by PM2 and Nginx for file locations
+  node_version: "20.x"                            # Used by Node.js setup and PM2
+  app_port: 3000                                  # Used by PM2 (listen port) and Nginx (proxy)
+  node_env: "production"                          # Used by both for environment settings

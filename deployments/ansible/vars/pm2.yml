@@ -1,0 +1,32 @@
+---
+# PM2-specific configuration variables
+pm2_config:
+  # Clustering settings
+  instances: -1                                   # Number of instances (-1 for auto-detect)
+  exec_mode: "cluster"                           # Execution mode
+  
+  # Memory management
+  max_memory_restart: "1G"                       # Memory threshold for restart
+  node_args: "--max-old-space-size=1536"        # Node.js memory settings
+  
+  # Restart behavior
+  max_restarts: 10                               # Maximum number of restarts on error
+  min_uptime: "5s"                              # Minimum uptime to consider app started
+  restart_delay: 4000                           # Delay between restarts (ms)
+  
+  # Process management
+  kill_timeout: 5000                            # Time before forcing process kill (ms)
+  wait_ready: true                              # Wait for ready event
+  listen_timeout: 8000                          # Time to wait for listen event
+  
+  # Logging configuration
+  merge_logs: true                              # Merge logs from all instances
+  time: true                                    # Add timestamps to logs
+  error_log: "logs/err.log"                    # Error log path
+  out_log: "logs/out.log"                      # Output log path
+
+  # Log rotation settings
+  log_rotate:
+    max_size: "10M"                            # Maximum log file size
+    retain: 7                                   # Number of rotated logs to keep
+    compress: true                             # Compress rotated logs

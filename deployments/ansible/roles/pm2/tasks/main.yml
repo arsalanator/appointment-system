@@ -1,0 +1,33 @@
+---
+- name: Install PM2 globally
+  npm:
+    name: pm2
+    global: yes
+    state: present
+  
+- name: Install PM2 logrotate module
+  command: pm2 install pm2-logrotate
+  args:
+    creates: "{{ ansible_env.HOME }}/.pm2/module_conf.json"
+
+- name: Configure PM2 logrotate
+  command: "{{ item }}"
+  with_items:
+    - pm2 set pm2-logrotate:max_size 10M
+    - pm2 set pm2-logrotate:retain 7
+    - pm2 set pm2-logrotate:compress true
+  changed_when: false
+
+- name: Create PM2 ecosystem config
+  template:
+    src: ecosystem.config.js.j2
+    dest: "{{ app_root }}/ecosystem.config.js"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+
+- name: Ensure PM2 starts on boot
+  command: pm2 startup systemd -u {{ app_user }} --hp /home/{{ app_user }}
+  args:
+    creates: /etc/systemd/system/pm2-{{ app_user }}.service
+  when: ansible_service_mgr == "systemd"
