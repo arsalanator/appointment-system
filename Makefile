@@ -59,6 +59,9 @@ BUILD_PATH := $(FRONTEND_PATH)/build
 DATABASE_RULES_PATH := deployments/firebase/database.rules.json
 FCM_SERVER_KEY_PATH := deployments/firebase/fcm-server-key.json
 
+# aws related vars
+AWS_CLOUD_FORMATION_STACK_NAME := compute:ec2--storage:s3-ebs--network:iam-eip
+
 # docker related vars
 DOCKER_IMAGE := appointment-system
 DOCKER_REGISTRY := your-docker-registry # Replace with actual registry
