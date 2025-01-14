@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Main stack for deploying full infrastructure
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+    AllowedValues: [development, staging, production]
+  
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of existing EC2 KeyPair for SSH access
+
+Resources:
+  NetworkStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./network.yaml
+      Parameters:
+        Environment: !Ref Environment
+
+  StorageStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./storage.yaml
+      Parameters:
+        Environment: !Ref Environment
+
+  IAMStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./iam.yaml
+      Parameters:
+        Environment: !Ref Environment
+
+  InstancesStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./instances.yaml
+      Parameters:
+        Environment: !Ref Environment
+        KeyPairName: !Ref KeyPairName
+        IAMInstanceProfile: !GetAtt IAMStack.Outputs.InstanceProfile
+        EBS1Id: !GetAtt StorageStack.Outputs.EBSVolume1Id
+        ElasticIP1: !GetAtt NetworkStack.Outputs.ElasticIP1
+        ElasticIP2: !GetAtt NetworkStack.Outputs.ElasticIP2
+
+Outputs:
+  BucketName:
+    Description: Name of created S3 bucket
+    Value: !GetAtt StorageStack.Outputs.BucketName
+
+  EC2Instance1IP:
+    Description: Public IP of EC2 Instance 1
+    Value: !GetAtt NetworkStack.Outputs.ElasticIP1
+
+  EC2Instance2IP:
+    Description: Public IP of EC2 Instance 2
+    Value: !GetAtt NetworkStack.Outputs.ElasticIP2

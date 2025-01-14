@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Storage resources including S3 and EBS
+
+Resources:
+  ApplicationBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-app-bucket-${AWS::AccountId}
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  EBSVolume1:
+    Type: AWS::EC2::Volume
+    Properties:
+      Size: 50
+      VolumeType: gp3
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Encrypted: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-EBS1
+
+Outputs:
+  BucketName:
+    Description: Name of created S3 bucket
+    Value: !Ref ApplicationBucket
+
+  EBSVolume1Id:
+    Description: ID of created EBS volume
+    Value: !Ref EBSVolume1
